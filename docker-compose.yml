@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  imt-service:
+    container_name: imt-service-container
+    image: dockerfile:imt
+    networks:
+      - risk-network
+  
+  pressure-service:
+    container_name: pressure-service-container
+    image: dockerfile:pressure
+    networks:
+      - risk-network
+
+  mongodb:
+      image : mongo:latest
+      container_name: mongodb-container
+      volumes:
+        - /home/anna/code/mongodb/database:/data/db
+      networks:
+        - risk-network
+      ports:
+        - "27018:27017"
+      restart: always
+
+  db-service:
+    container_name: db-service-container
+    image: dockerfile:db
+    networks:
+      - risk-network
+
+  risk-service:
+    container_name: risk-service-container
+    image: dockerfile:risk
+    ports:
+        - "81:80"
+    networks:
+      - risk-network
+
+networks:
+  risk-network:
+    driver: bridge
